@@ -6,28 +6,45 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
      <link rel="stylesheet" href="/css/headerstyle.css">
+     
+     
+                 function onload(){
+                
+                Promise.resolve()
+                .then(function(){
+                    
+                    return $.post('posts');
+                })
+                
+                .then(function(posts){
+                    
+                    $('#posts').html('');
+                    posts.forEach(function(post){
+                        
+                        $('#posts').append(
+                            '<div data-postId = "'+ post._id + '">' + 
+                            '<img src="' + post.image + '"/>' + 
+                            '<p>' + post.comment + '<p>' + 
+                            '<p>Like Count: ' +
+                            '<span id="like' + post._id + '">' + post.likeCount + '</span>' + 
+                            '</p>' +
+                            '<button onclick = "likeClick(\'' + post._id + '\');"> Like</button>' +
+                            '</div>'
+                            );
+                    });
+                })
+                
+                .catch(function(err){
+                    console.log(err);
+                });
+                
+            }
+        </script>
+
   </head>
   <body>
       
- <!-- <div class="header">
-             <ul>
-             <li ><a><img src="img/logo_insta.png" width="40px" height="40px"></img></a></li>
-             <li ><a><vr/></a></li>
-             <li ><a><img src="img/Instagram_logo.svg.png" width="150px" height="40px"></img></a></li>
-             
-             <!--<li  id="search" style="display:block;margin:0 auto" >
-             <a>
-                  <div class="container">
-                    <input type="search" id="search" placeholder="Search..." align-text:"center"/>
-                </div>
-             <!--   
-            </li>
-            <li  style="float:right"><a><img src="img/person-outline.png"   width="35px" height="28px" ></img></a></li>
-            <li  style="float:right"><a><img src="img/heart.png"   width="40px" height="32px" ></img></a></li>
-            <li  style="float:right"><a><img src="img/compass.png"   width="35px" height="30px" ></img></a></li>
-          </ul>
-          </div> -->
-        <!--<hr>-->
+
         
         
         <div class="top_container">

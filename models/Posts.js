@@ -5,5 +5,5 @@ module.exports=mongoose.model('Post',{
    image: String,
    comment: String,
    likeCount: Number,
-   feedbackCount: Number
+   feedbackCount: Number //number of comments from others
 });

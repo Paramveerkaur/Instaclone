@@ -175,9 +175,25 @@ vr{
       margin-top: 50px;
       padding-bottom: 20px;
       margin-bottom: 20px;
-     
-      
-  }
+      }
+  
+  
+  .singin_style{
+      position: relative;
+      border:thin-solid;
+      width:45%;
+      height: auto;
+      float: center;
+      margin-left: auto;
+      margin-right:auto;
+      padding-top: 20px;
+      margin-top: 50px;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      }
+  
+  
+  
   
   .time
   {

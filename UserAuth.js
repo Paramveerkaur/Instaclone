@@ -9,7 +9,7 @@ module.exports.init=function(passport){
     persistent login sessions*/
     passport.serializeUser(function(user,callback)
     {
-        console.log('serializing user: '+user.username);
+      //  console.log('serializing user: '+user.username);
         callback(null,user._id);
     });
     
@@ -18,7 +18,7 @@ module.exports.init=function(passport){
        User.findById(id,function(err,user)
        {
          
-          console.log('deserializing user: '+user.username);
+        //  console.log('deserializing user: '+user.username);
            callback(err,user);
        }) ;
     });
@@ -107,7 +107,7 @@ function handleLoginAttempt(email,password,cb){
             .then(function(user){
                 //execute the callback with appropriate parameters
                 cb(null,user);
-            })
+            });
         }
         else
         cb(null,false);

@@ -1,86 +1,68 @@
 <!doctype html>
 <html lang="en">
-  <head>
-      <!-- our local copy of the jquery library. Normally ,we'd use a CDN copy to
-      use someone else's bandwidth-->
-      <script src="js/jquery.min.js"></script>
-      <link rel="stylesheet" href "css/bootstrap.min.css"/>
-      <script src ="js/bootstrap.min.js"></script>
-      
-      <!-- I am including this script directly in the html , but usually this would be in its own file-->
-      <script>
-    /*global $*/  
-      function handleSignInAttempt(){
-      var email=$('#email').val();
-      var password=$('#password').val();
-      
-      if(email.length>0 && password.length>0){
-      Promise.resolve()
-      .then(function(){
-      return $.post('signin','username=' +email+'&password='+password);
-      })
-      .then(function(auth)
-      {
-          if(auth.isValid){
-              $('#error').text='';
-              window.location.replace('/posts');
-          }
-          else{
+
+<head>
+
+  <script src="js/jquery.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/headerstyle.css">
+  <script>
+    /*global $*/
+    function handleSigninAttempt() {
+      var email = $('#email').val();
+      var password = $('#password').val();
+      if (email.length > 0 && password.length > 0) {
+        Promise.resolve()
+          .then(function() {
+            return $.post('signin', 'username=' + email + '&password=' + password);
+          })
+          .then(function(auth) {
+            if (auth.isValid) {
+              $('#error').text = '';
+              window.location.replace('posts');
+            }
+            else {
               $('#error').html(auth.message);
               $('#email').html('');
               $('#password').html('');
-          }
-      })
-      .catch(function(err)
-      {
-          console.log(err);
-      })
+            }
+          })
+          .catch(function(err) {
+            console.log(err);
+          })
       }
-      else
-      {
-          $('#error').html('Please provide both username and password');
+      else {
+       
+        alert('Please provide both username and password');
       }
-      }
-      
-      </script>
-      </head>
-      <!-- add the onload event handler to the body tag-->
-      <body>
-          <div class="container">
-              <div class="row">
-                  <div class="col-sm-6 col-sm-offset-3">
-                      <h1>Sign in</h1>
-                      
-                      <div class="form-group">
-                           <input type="text" name="email" id="email" class="form-control" placeholder="Email" required autofocus/>
-                           </div>
-                           
-                      <div class="form-group">
-                           <input type="password" name="password" id="password" class="form-control" placeholder="Password" required/>
-                     </div>
-                     
-                     
-                      <div class="form-group">
-                           <button class="btn btn-lg btn-primary" onClick="handleSignInAttempt()">Sign in </button>
-                           
-                     </div>
-                     
-                     <a href="/join" class="text-center">Create an account </a></br>
-                     <a href="/passwordreset" class="text-center">I forgot my password </a>
-                      <p id="error"></p>                             
-                     
-                 </div>
-              </div>
-              </div>
-              </body>
-         </html>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+    }
+  </script>
+</head>
+<!-- add the onload event handler to the body tag -->
+
+<body background="img/background_insta.jpg">
+  <div class="centerContainer">
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <h4>Sign in to your account</h4>
+        
+        <div class="form-group">
+          <input type="text" name="email" id="email" class="form-control" placeholder="Email" required autofocus/>
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" id="password" class="form-control" placeholder="Password" required/>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-lg btn-block" onclick="handleSigninAttempt()">Sign in</button>
+        </div>
+
+        <a href="/join" class="text-center">Create an account</a></br>
+        <a href="/passwordreset" class="text-center">forgot password?</a>
+        <p id="error"></p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

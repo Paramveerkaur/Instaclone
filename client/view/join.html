@@ -5,6 +5,7 @@
 <script src="js/jquery.min.js"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
 <script src="js/bootstrap.min.js"></script>
+ <link rel="stylesheet" type="text/css" href="css/headerstyle.css">
 
 <!--In html but usually this would be in its own file-->
 <script >
@@ -13,6 +14,7 @@
         var email=$('#email').val();
         var password =$('#password').val();
         var repeatPassword=$('#repeat_password').val();
+      
         
         if(email.length >0 && password.length>0 && repeatPassword.length>0 && password==repeatPassword){
            Promise.resolve()
@@ -36,20 +38,20 @@
            });
          }
          else{
-             $('#error').html('Please provide both username and password and ensure passwords match');
+             alert('Please provide both username and password and ensure passwords match');
          }
     }
 </script>
 </head>
 
 <!-- add the onload event handler to the body tag-->
-<body>
+<body background="img/background_insta.jpg">
    
     
-    <div class="container">
+    <div class="centerContainer">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
-                <h1>Join</h1>
+                <h3>Join</h3>
                 
                 <div class="form-group">
                     <input id="email" type="text" name="email" class="form-control" placeholder="Email" required autofocus/>
@@ -63,7 +65,7 @@
                     <input id="repeat_password" type="password" name="repeat_password" class="form-control" placeholder="Repeat Password" required/>
                </div>
                <div class ="form-group">
-                   <button class="btn btn-lg btn-primary" onclick="handleJoinAttempt()">Join</button>
+                   <button class="btn btn-lg btn-primary btn-block" onclick="handleJoinAttempt()">Join</button>
                </div>
                <p id="error"></p>
                 </div>

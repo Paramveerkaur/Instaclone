@@ -2,7 +2,7 @@ const nodemailer =require('nodemailer');
 
 module.exports.send=function(to,subject,text){
     //create reusable  transporter object using the default SMTP transport
-    let transport =nodemailer.createTransport({
+    let transporter =nodemailer.createTransport({
         host:'smtp.gmail.com',
         post:465,
         secure:true,//secure:true for port 465 , secure :false for port587

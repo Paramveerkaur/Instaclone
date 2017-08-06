@@ -4,113 +4,168 @@
 <head>
     <title>insta Example</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+    
     <link rel="stylesheet" href="css/headerstyle.css">
-
-    <script type="text/javascript">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
         /*global $*/
+        
+         //handle a click on the LIKE button we've included with each post
+            //we receive the ID of the post as a parameter
+            function likeClick(id){
+                Promise.resolve()
+                .then(function(){
+                    //jQuery provides a nice convenience method for easily sending a post with parameters in JSON
+                    //here we pass the ID to the incrLike route on the server side so it can do the incrementing for us
+                    //note the return. This MUST be here, or the subsequent then will not wait for this to complete
+                  console.log('id sent');
+                    return $.post('incrLike', {id : id});
+                   
+                })
+                .then(function(like){
+                    if (like.count > 0)
+                        //jQuery provides a nice convenience methot for easily setting the count to the value returned
+                        $('#like' + like.id).html(like.count);
+                        console.log(('returnd count '+like.count));
+                        
+                })
+                .catch(function(err){
+                    //always include a catch for the promise chain
+                    console.log(err);
+                });
+            }
+            
+           //the non-jQuery version of likeClick() looks like this:
+            function likeClickNJQ(id){
+                //create an XMLHttpRequest object
+                var xhr = new XMLHttpRequest();
+                //say we want to do a post to incrLike
+                xhr.open("POST", "incrLike", true);
+                //set up the header to say we're sending json data
+                xhr.setRequestHeader("Content-type", "application/json");
+                //define a callback to determine what we're going to do with the response
+                xhr.onreadystatechange = function () {
+                    //if things were successful
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        //parse the string data received back into JSON data
+                        var like = JSON.parse(xhr.responseText);
+                        //update the element with the count
+                        document.getElementById('like' + like.id).innerHTML = like.count;
+                    }
+                };
+                //create a string from the JSON data we want to send
+                var data = JSON.stringify({"id": id});
+                //send it
+                xhr.send(data);
+            }          
         function bootUp() {
-
+            
             Promise.resolve()
                 .then(function() {
-
                     return $.post('posts');
                 })
+                .then(function(posts) {
+                    $('#posts').html('');
+                    posts.forEach(function(post) {
+                        var likeString = '';
+                        if (post.isLiked)
+                            likeString = 'I liked this';
 
-            .then(function(posts) {
-
-                $('#posts').html('');
-                posts.forEach(function(post) {
-
-                    $('#posts').append(
-                        '<div >' +
-                        '<img style="vertical-align:middle" class="image_round"  src="img/profile_pic.png" />' +
-                        '<span style=""><strong>Priyanka Chopra</strong></span>' +
-                        '<span class="time" style="float:cente">2h</span>' +
-                        '<br/>' +
-                        '<img  style="padding-top:20px;width:100%" src="' + post.image + '"  />' +
-                        '</div>' +
-                        '<div style="padding-left:10px;padding-right:10px;padding-top:10px">' +
-                        '<p> <strong>2519,961 likes</strong></p>' +
-                        '<p><strong>Priyanka Chopra</strong> Glimpse from Baywatch</p>' +
-                        '<hr/>' +
-                        '<div style="padding-top:20px;padding-left:20px">' +
-
-                        '<img style="vertical-align:middle" src="img/heart.png" width="30px" height="25px"/>' +
-                        '<span style="color:grey;padding-left:20px">Add a comment</span>' +
-                        '<img style="float:right;vertical-align:middle" src="img/dots.png" width="30px" height="25px">' +
-                        '</div> '
-
-
-
-                    );
-                });
-            })
+                        $('#posts').append(
+                            '<div class="container1" >' +
+                            '<div >' +
+                            '<img style="vertical-align:middle" class="image_round"  src="img/profile_pic.png" />' +
+                            '<span style=""><strong>Priyanka Chopra</strong></span>' +
+                            '<span class="time" style="float:cente">2h</span>' +
+                            '<br/>' +
+                            '<img  style="padding-top:20px;width:100%" src="' + post.image + '"  />' +
+                            '</div>' +
+                            '<div style="padding-left:10px;padding-right:10px;padding-top:10px">' +
+                          //  '<p> <strong>'+2519,961 likes+'</strong></p>' +
+                           '<p>Likes ' + 
+                            //use a span with an id so the javascript can find this easily later
+                            '<span id ="like' + post._id + '">' + post.likeCount + '</span>' + 
+                            '</p>' +
+                            //setting comment into the paragraph
+                            '<p><strong>Priyanka Chopra </strong> '+post.comment+'</p>'  +
+                            
+                            //for like button
+                            '<p id="ilikethis">' + likeString + '</p>' +
+                            //set up the click event to call likeClick() with the id of this item as a parameter
+                           
+                            '<div style="">' +
+                             '<button onclick="likeClick(\'' + post._id + '\');">Like</button>' +
+                           
+                            '<span style="color:grey;padding-left:20px">Add a comment</span>' +
+                            '<img style="float:right;vertical-align:middle" src="img/dots.png" width="30px" height="25px">' +
+                            '</div> ' +
+                            '</div >'
+                        );
+                    });
+                })
 
             .catch(function(err) {
                 console.log(err);
             });
+        }
 
+        //upload picture handler
+        function uploadClick() {
+            //go get the data from the form
+            var form = new FormData($("#uploadForm")[0]);
+            //we can post this way as well as $.post
+            $.ajax({
+                url: '/upload',
+                method: "POST",
+                dataType: 'json',
+                //the form object is the data
+                data: form,
+                //we want to send it untouched, so this needs to be false
+                processData: false,
+                contentType: false,
+                //add a message 
+                success: function(result) {},
+                error: function(er) {}
+            });
         }
     </script>
-
-
-
-
-
 </head>
 
 <body onload="bootUp();">
+ <div class="divcontainer">
+              <div>     <img src="img/insta_logo.png" ></img>   </div>
+               <div> <input type="search" id="search" placeholder="Search..." align-text: "center"/></img>   
+              </div>
+              <div>                  
+              <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add a Picture</button>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
 
-
-    <div class="top_container">
-        <div class="logo">
-            <ul>
-                <li>
-                    <a><img src="img/logo_insta.png" width="40px" height="40px"></img>
-                    </a>
-                </li>
-                <li>
-                    <a>
-                        <vr/>
-                    </a>
-                </li>
-                <li>
-                    <a><img src="img/Instagram_logo.svg.png" width="100px" height="40px"></img>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="search">
-            <div class="container">
-                <input type="search" id="search" placeholder="Search..." align-text: "center"/>
-            </div>
-        </div>
-        <div class="side_option">
-            <ul>
-                <li style="float:right">
-                    <a><img src="img/person-outline.png" width="35px" height="28px"></img>
-                    </a>
-                </li>
-                <li style="float:right">
-                    <a><img src="img/heart.png" width="40px" height="32px"></img>
-                    </a>
-                </li>
-                <li style="float:right">
-                    <a><img src="img/compass.png" width="35px" height="30px"></img>
-                    </a>
-                </li>
-            </ul>
-        </div>
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Add a Picture</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form  style="text-align:center" id="uploadForm" enctype="multipart/form-data" name="uploadForm" novalidate>
+                                    <input type="file" name="userPhoto" id="userPhoto" />
+                               </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="uploadClick();">Send</button>
+                            </div>
+  </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ <div id="posts">
+    
     </div>
 
-    <div id="posts" class="container1">
-        <!-- <hr style="padding-top:10px;margin-right:auto;margin-left:auto;height:0.02px"/> -->
-    </div>
-    </div>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-</body>
+        </body>
 
 </html>

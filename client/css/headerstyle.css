@@ -14,6 +14,33 @@ body
  margin-right: auto;
  margin: 0;
 }
+
+
+ .centerContainer
+        {
+          width:auto;
+          height:auto;
+          position:fixed;
+          top:20%;
+          left:40%;
+          margin-top:auto;
+          border:5px groove ghostwhite ;
+          border-radius:20px;
+          padding: 30px 50px 30px 50px;  
+          background:ghostwhite;
+        } 
+        
+.divcontainer{
+    display: flex;
+    background-color:#ffffff;
+   
+}
+.divcontainer>div{
+    flex:1;
+    text-align: center;
+    align-self:center;
+    padding:10px 0 10px 0;
+}
 .header{
     top:0;
 }
@@ -25,9 +52,6 @@ ul{
   margin: 0;
   padding-bottom: 20px;
   margin-right: 10px;
-  /*margin: 0;
-  padding:0;
-  overflow: hidden;*/
 }
 
 
@@ -80,24 +104,23 @@ vr{
       right: 0;
   }
   
- #search{
-     width:auto;
-     margin-left: auto;
-     margin-right: auto;
-     float: center;
-     text-align: center;
-     display: block;
-     height:4px;
+/*#search{*/
+ /*    width:auto;*/
+ /*    margin-left: auto;*/
+ /*    margin-right: auto;*/
+ /*    float: center;*/
+ /*    text-align: center;*/
+ /*    display: block;*/
+ /*    height:4px;*/
     
-  }
- 
+ /* }
   .container
   {
-    width:300px;
-    position: relative;
-    vertical-align: center;
-    
-    
+    width:auto;
+    position: absolute;
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .top_container
@@ -105,11 +128,12 @@ vr{
       background-color:#ffffff;
       display: flex;
       position: relative;
-      width:100%;
-      height:100px;
+      width:auto;
+      height:auto;
       margin-left: auto;
       margin-right: auto;
-      margin: 0; 
+      vertical-align: middle;
+      
   }
   
   
@@ -137,10 +161,9 @@ vr{
   
   .container input#search
   {
-      width:300px;
-      height:50px;
+      width:auto;
+      height:auto;
       float:center;
-      padding-left: 15px;
       position: relative;
       margin-left: auto;
       margin-right: auto;
@@ -153,8 +176,6 @@ vr{
     }*/
   .container.search{
       position: relative;
-      top:30%;
-      margin-top: 17px;
       float: center;
       vertical-align: middle;
       margin-left: auto;
@@ -172,9 +193,9 @@ vr{
       margin-left: auto;
       margin-right:auto;
       padding-top: 20px;
-      margin-top: 50px;
+      margin-top: 20px;
       padding-bottom: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       }
   
   
@@ -206,3 +227,44 @@ vr{
       height:40px;
       margin-left:20px;
   }
+  
+  
+  
+ /* @media only screen and (max-width:399px)
+{
+    
+    .header_icon{
+    margin: 1%;
+    width:100%;  
+  }
+  
+}
+
+@media only screen and (min-width:900px)
+{
+	.header_icon{
+		float:left;
+		width:23%;
+	}
+}
+
+
+
+@media screen and (max-width:899px) and (min-width:400px)
+{
+	.header_icon{
+		float:left;
+		margin:5%;
+		width:44.6%;
+		height:25%;
+	}
+}
+*/
+
+ 
+	
+
+
+
+  
+  

@@ -2,7 +2,6 @@ const User =require('./models/User.js');
 const LocalStrategy=require('passport-local').Strategy;
 const hash = require('./utils/hash.js');
 
-
 //encapsulate initialization of the passport functinality
 module.exports.init=function(passport){
     /*passport needs to be able to serialoze and deserialize users to support 
@@ -44,7 +43,6 @@ module.exports.isAuthenticated=function(req,res,next){
         res.redirect('/signin');
     }
 }
-
 
 //passport will call this function when someone attempts to log in 
 function handleLoginAttempt(email,password,cb){

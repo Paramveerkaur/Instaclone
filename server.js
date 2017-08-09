@@ -65,20 +65,6 @@ userAuth.init(passport);
 //add file upload support
 router.use(fileUpload());
 
-/*router.get('/', function(req, res) {
-  console.log('client request posts.html');
-  res.sendfile(path.join(__dirname, 'client', 'index.html'));
-});*/
-
-/*router.post('/posts', function(req, res) {
-  console.log('client request postslist');
-
-  Post.find({})
-    .then(function(paths) {
-      res.json(paths);
-    });
-});*/
-
 //tell the router how to handle a get request to the root
 router.get('/', function(req, res) {
 
@@ -162,7 +148,7 @@ router.get('/passwordreset', (req, res) => {
 });
 
 
-
+//post method of Password reset
 router.post('/passwordreset', (req, res) => {
   Promise.resolve()
     .then(function() {
@@ -172,7 +158,6 @@ router.post('/passwordreset', (req, res) => {
       });
     })
     .then(function(user) {
-
       if (user) {
         var pr = new PasswordReset();
         pr.userId = user.id;
@@ -185,6 +170,8 @@ router.post('/passwordreset', (req, res) => {
               email.send(req.body.email, 'password reset', 'https://clone-insta-paramveerjamhal.c9users.io/verifypassword?id=' + pr.id);
             }
           });
+      }else{
+        console.log("User");
       }
     });
 });
@@ -194,20 +181,23 @@ router.get('/verifypassword', function(req, res) {
   var password;
   Promise.resolve()
     .then(function() {
+      console.log(req.query.id);
       return PasswordReset.findOne({
         _id: req.query.id
       });
       //return PasswordReset.find();
     })
     .then(function(pr) {
-      console.log('pr ' + pr);
+      console.log('I sam pr ' + pr);
       if (pr) {
-        if (pr.expires > new Date()) {
+        console.log(pr.expires < new Date())
+        if (pr.expires < new Date()) {
+            console.log("e")
           password = pr.password;
           console.log('pr user Id ' + pr.userId);
           //see if there's a user with this email
           return User.findOne({
-            _id: pr.userId
+            _id : pr.userId
           });
         }
       }
@@ -217,10 +207,12 @@ router.get('/verifypassword', function(req, res) {
       if (user) {
         user.password = password;
 
-        return user.save();
-
+        user.save();
+      //  res.redirect('https://www.google.com');
+      res.sendFile(path.join(__dirname, 'client/view', 'signin.html'));
+     // res.Write("<script>alert('sucessfull');</script>");
       }
-    })
+    });
 });
 
 
@@ -231,7 +223,6 @@ router.get('/posts', userAuth.isAuthenticated, function(req, res) {
 
 router.post('/posts', function(req, res) {
   console.log('client request postslist');
-
   Post.find({})
     .then(function(paths) {
       res.json(paths);
@@ -239,15 +230,13 @@ router.post('/posts', function(req, res) {
 });
 
 
-
-
 //tell the router how to handle a post request to upload a file
 router.post('/upload', userAuth.isAuthenticated, function(req, res) {
   var response = {success: false, message: ''};
-  
-  if (req.files){
+   if (req.files){
     // The name of the input field is used to retrieve the uploaded file 
     var userPhoto = req.files.userPhoto;
+   /* var userComment=req.files.userComment;*/
     //invent a unique file name so no conflicts with any other files
     var guid = Guid.create();
     //figure out what extension to apply to the file
@@ -303,18 +292,6 @@ router.post('/upload', userAuth.isAuthenticated, function(req, res) {
   }
 });
 
-//tell the router how to handle a get request to the posts page
-//only in case of authenticated user
-/*router.get('/posts',userAuth.isAthenticated,function(req,res){
-  console.log('client requests posts.html');
-  //use sendfile to send our posts.html file
-  res.sendFile(path.join(__dirname,'client','index.html'));
-});*/
-
-
-
-
-
 //tell the router how to handle a post request to /posts
 //only do this if this is an authenticated user
 router.post('posts',userAuth.isAuthenticated, function(req,res){
@@ -347,7 +324,6 @@ return Promise.all(promises);
 //tell the router how to handle a post reuest to /incrLike
 router.post('/incrLike',userAuth.isAuthenticated,function(req,res){
   console.log('increment like for '+req.body.id+' by user '+req.user.email);
-  
   Like.findOne({userId:req.user.id,postId:req.body._id})
   .then(function(like){
     if(!like){
@@ -362,10 +338,8 @@ router.post('/incrLike',userAuth.isAuthenticated,function(req,res){
   .then(function(post){
     var like=new Like();
     like.userId=req.user.id;
-    
     like.postId=req.body.id;
     like.save();
-    
     //a successful save returns back the updated object
     res.json({id:req.body.id,count:post.likeCount});
      });
@@ -380,25 +354,6 @@ router.post('/incrLike',userAuth.isAuthenticated,function(req,res){
   console.log(err);
 })
 });
-
-/*router.post('/incrLike', function(req, res) {
-  console.log('increment like posts' + req.body.id);
-  Post.findById(req.body.id)
-    .then(function(post) {
-      post.likeCount++;
-      return post.save(post);
-    })
-    .then(function(post) {
-      res.json({
-        id: req.body.id,
-        count: post.likeCount
-      });
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});*/
-
 
 //set up the http server and start it running
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {

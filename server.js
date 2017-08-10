@@ -1,7 +1,4 @@
 const dbUrl = 'mongodb://admin:jojo12345@ds127842.mlab.com:27842/asgndb';
-/*Paramveer Kaur and Shubhlata*/
-
-
 
 //require statement-adds external modules from node modules or own defined modules
 const http = require('http');
@@ -239,7 +236,7 @@ router.post('/upload', userAuth.isAuthenticated, function(req, res) {
    if (req.files){
     // The name of the input field is used to retrieve the uploaded file 
     var userPhoto = req.files.userPhoto;
-   /* var userComment=req.files.userComment;*/
+  //  var userComment=req.text.userComment;
     //invent a unique file name so no conflicts with any other files
     var guid = Guid.create();
     //figure out what extension to apply to the file
@@ -273,7 +270,7 @@ router.post('/upload', userAuth.isAuthenticated, function(req, res) {
           post.userId = req.user.id;
           post.image = './img/' + filename;
           post.likeCount = 0;
-          post.comment = '';
+          post.comment ='';
           post.feedbackCount = 0;
           //save it
           post.save()

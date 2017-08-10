@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css?family=Dancing+Script');
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+
 body
 {
   background-color: #f0f0f0;
@@ -86,9 +89,16 @@ body
       height:40px;
       margin-left:20px;
   }
-  
  
-	
+ .fontcolor{
+     font-family:'Pacifico',cursive;
+     color: #000000;
+ } 
+ 
+.submitbutton{
+     font-family:'Pacifico',cursive;
+     
+ } 	
 
 
 
